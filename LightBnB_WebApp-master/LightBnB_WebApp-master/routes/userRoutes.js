@@ -32,10 +32,6 @@ router.post("/login", (req, res) => {
     }
 
     if (!bcrypt.compareSync(password, user.password)) {
-      console.log(password);
-      console.log(user.password);
-      console.log(bcrypt.hashSync(password,10));
-      console.log(user.password==='$2a$10$FB/BOAVhpuLvpOREQVmvmezD4ED/.JBIDRh70tGevYzYzQgFId2u');
       return res.send({ error: "error" });
     }
 
