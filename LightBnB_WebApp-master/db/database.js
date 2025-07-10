@@ -9,22 +9,7 @@ const pool = new Pool({
   database: "lightbnb",
 });
 
-/// Users
-
-/**
- * Get a single user from the database given their email.
- * @param {String} email The email of the user.
- * @return {Promise<{}>} A promise to the user.
- */
 const getUserWithEmail = function (email) {
-  /*let resolvedUser = null;
-  for (const userId in users) {
-    const user = users[userId];
-    if (user && user.email.toLowerCase() === email.toLowerCase()) {
-      resolvedUser = user;
-    }
-  }
-  return Promise.resolve(resolvedUser);*/
   return pool
     .query(`SELECT * FROM users
       WHERE users.email = $1`, [email])
@@ -41,11 +26,6 @@ const getUserWithEmail = function (email) {
     });
 };
 
-/**
- * Get a single user from the database given their id.
- * @param {string} id The id of the user.
- * @return {Promise<{}>} A promise to the user.
- */
 const getUserWithId = function (id) {
   //return Promise.resolve(users[id]);
    return pool
@@ -63,11 +43,6 @@ const getUserWithId = function (id) {
     });
 };
 
-/**
- * Add a new user to the database.
- * @param {{name: string, password: string, email: string}} user
- * @return {Promise<{}>} A promise to the user.
- */
 const addUser = function (user) {
   console.log(user);
   return pool
@@ -91,7 +66,14 @@ const addUser = function (user) {
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function (guest_id, limit = 10) {
-  return getAllProperties(null, 2);
+  return pool
+  .query(`SELECT * FROM reservations
+   JOIN users on $1 = users.id
+   LIMIT $2; `, [guest_id,limit])
+   .then ((results) => {
+    console.log(results.rows);
+    return results.rows;
+   })
 };
 
 /// Properties
