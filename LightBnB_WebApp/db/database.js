@@ -14,7 +14,6 @@ const getUserWithEmail = function(email) {
     .query(`SELECT * FROM users
       WHERE users.email = $1`, [email])
     .then((result) => {
-
       if (result.rows.length === 0) {
         return null;
       }
@@ -42,10 +41,9 @@ const getUserWithId = function(id) {
 };
 
 const addUser = function(user) {
-  console.log(user);
   return pool
     .query(`INSERT INTO users (name, email, password)
-    VALUES ($1,$2,$3)
+    VALUES ($1, $2, $3)
     RETURNING *;`, [user.name, user.email, user.password])
     .then((result) => {
       return result.rows[0];
@@ -56,14 +54,7 @@ const addUser = function(user) {
 };
 
 /// Reservations
-
-/**
- * Get all reservations for a single user.
- * @param {string} guest_id The id of the user.
- * @return {Promise<[{}]>} A promise to the reservations.
- */
 const getAllReservations = function(guest_id, limit = 10) {
-  console.log(limit);
   return pool
     .query(`SELECT * FROM reservations
    JOIN properties on properties.id = property_id
@@ -79,12 +70,6 @@ const getAllReservations = function(guest_id, limit = 10) {
 
 /// Properties
 
-/**
- * Get all properties.
- * @param {{}} options An object containing query options.
- * @param {*} limit The number of results to return.
- * @return {Promise<[{}]>}  A promise to the properties.
- */
 const getAllProperties = function(options, limit = 10) {
   const queryParams = [];
   let queryString = `
@@ -106,6 +91,7 @@ const getAllProperties = function(options, limit = 10) {
 
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
     queryParams.push(`${options.minimum_price_per_night * 100}`, `${options.maximum_price_per_night * 100}`);
+    // checks if city is included in the SQL query
     if (queryParams.length === 3) {
       queryString += `AND properties.cost_per_night > $${queryParams.length - 1} AND properties.cost_per_night < $${queryParams.length}
       `;
@@ -117,6 +103,7 @@ const getAllProperties = function(options, limit = 10) {
 
   if (options.minimum_price_per_night) {
     queryParams.push(`${options.minimum_price_per_night * 100}`);
+    //checks if city is included in the SQL query
     if (queryParams.length === 2) {
       queryString += `AND properties.cost_per_night > $${queryParams.length} 
       `;
@@ -152,11 +139,6 @@ const getAllProperties = function(options, limit = 10) {
   return pool.query(queryString, queryParams).then((res) => res.rows);
 };
 
-/**
- * Add a property to the database
- * @param {{}} property An object containing all of the property details.
- * @return {Promise<{}>} A promise to the property.
- */
 const addProperty = function(property) {
   return pool
     .query(`INSERT INTO properties (owner_id, title, description, thumbnail_photo_url,cover_photo_url,cost_per_night,street, city, province, post_code, country, parking_spaces, number_of_bathrooms,number_of_bedrooms)
