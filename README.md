@@ -25,4 +25,5 @@ LightBnB is a simple, single-page AirBnB clone.
 
 <img width="1868" height="782" alt="2025-07-12 22_31_54-" src="https://github.com/user-attachments/assets/9eb7d2de-b69a-4159-9002-a115a16b37d8" />
 
-!["Screenshot of LightBnB user reservations"] (https://github.com/dixilo-lite/LightBnB/blob/master/photos/2025-07-12%2022_32_33-Settings.png)
+<img width="1866" height="669" alt="2025-07-12 22_32_33-Settings" src="https://github.com/user-attachments/assets/71d1b9e7-84cf-4cbc-873a-64c17962ed7a" />
+
